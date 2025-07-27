@@ -11,7 +11,8 @@ func RegisterRoutes(router *gin.Engine) {
 	messageservice.CreateTableIfNotExists()
 
 	messageGroup := router.Group("/messages")
-	messageAuthGroup := messageGroup
 
-	messageAuthGroup.Use(authmiddleware.AuthRequired())
+	messageGroup.Use(authmiddleware.AuthRequired())
+
+	messageGroup.GET("/between/:senderId/:receiverId", GetMessagesBetweenUsersHandler)
 }

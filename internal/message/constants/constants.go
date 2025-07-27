@@ -1,8 +1,13 @@
 package messageconstants
 
-import messagemodel "connect/internal/message/model"
+import (
+	messagemodel "connect/internal/message/model"
+	"errors"
+)
 
-const (
+var (	
+	ErrMessageNotFound = errors.New("message not found")
+
 	ReadStatusSent messagemodel.ReadStatus = "sent"
 	ReadStatusDelivered messagemodel.ReadStatus = "delivered"
 	ReadStatusSeen messagemodel.ReadStatus = "seen"

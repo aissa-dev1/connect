@@ -11,14 +11,13 @@ func RegisterRoutes(router *gin.Engine) {
 	blockservice.CreateTableIfNotExists()
 
 	blockGroup := router.Group("/blocks")
-	blockAuthGroup := blockGroup.Group("/")
 
-	blockAuthGroup.Use(authmiddleware.AuthRequired())
+	blockGroup.Use(authmiddleware.AuthRequired())
 
-	blockAuthGroup.GET("/between/:blockerId/:blockedId", GetBlocksBetweenUsersHandler)
-	blockAuthGroup.GET("/all", GetBlockedUsersHandler)
+	blockGroup.GET("/between/:blockerId/:blockedId", GetBlocksBetweenUsersHandler)
+	blockGroup.GET("/all", GetBlockedUsersHandler)
 
-	blockAuthGroup.POST("/:blockedId", BlockHandler)
+	blockGroup.POST("/:blockedId", BlockHandler)
 
-	blockAuthGroup.DELETE("/:blockedId", UnblockHandler)
+	blockGroup.DELETE("/:blockedId", UnblockHandler)
 }
