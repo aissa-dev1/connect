@@ -25,7 +25,7 @@ func main() {
 	}
 
 	hasher.SetGlobalHash(hasher.NewHasher(hasher.NewBcrypt()))
-	
+
 	router := gin.Default()
 	router.Use(middleware.AllowCors())
 

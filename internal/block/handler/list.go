@@ -41,27 +41,11 @@ func GetBlocksBetweenUsersHandler(ctx *gin.Context) {
 		return
 	}
 
-	blocks := []blockmodel.Block{}
+	blocks, blocksErr := blockservice.GetBlocksBetweenUsers(blockerId, blockedId)
 
-	block1, block1Err := blockservice.GetBlock(blockerId, blockedId)
-
-	if block1Err != nil {
-		response.RespondInternalError(ctx, block1Err.Error())
+	if blocksErr != nil {
+		response.RespondInternalError(ctx, blocksErr.Error())
 		return
-	}
-
-	block2, block2Err := blockservice.GetBlock(blockedId, blockerId)
-
-	if block2Err != nil {
-		response.RespondInternalError(ctx, block2Err.Error())
-		return
-	}
-
-	if block1 != nil {
-		blocks = append(blocks, *block1)
-	}
-	if block2 != nil {
-		blocks = append(blocks, *block2)
 	}
 
 	response.RespondData[[]blockmodel.Block](ctx, blocks)

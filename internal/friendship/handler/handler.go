@@ -11,18 +11,17 @@ func RegisterRoutes(router *gin.Engine) {
 	friendshipservice.CreateTableIfNotExists()
 
 	friendshipGroup := router.Group("/friendships")
-	friendshipAuthGroup := friendshipGroup.Group("/")
 
-	friendshipAuthGroup.Use(authmiddleware.AuthRequired())
+	friendshipGroup.Use(authmiddleware.AuthRequired())
 
-	friendshipAuthGroup.GET("/receiver/:id", GetFriendRequestHandler)
-	friendshipAuthGroup.GET("/receiver/:id/all", GetAllFriendRequestsHandler)
-	friendshipAuthGroup.GET("/requests", GetRequestsHandler)
-	friendshipAuthGroup.GET("/friends", GetFriendsHandler)
+	friendshipGroup.GET("/receiver/:id", GetFriendRequestHandler)
+	friendshipGroup.GET("/receiver/:id/all", GetAllFriendRequestsHandler)
+	friendshipGroup.GET("/requests", GetRequestsHandler)
+	friendshipGroup.GET("/friends", GetFriendsHandler)
 
-	friendshipAuthGroup.POST("/:receiverId", SendFriendRequestHandler)
+	friendshipGroup.POST("/:receiverId", SendFriendRequestHandler)
 
-	friendshipAuthGroup.PATCH("/accept/:requesterId", AcceptFriendRequestHandler)
+	friendshipGroup.PATCH("/accept/:requesterId", AcceptFriendRequestHandler)
 
-	friendshipAuthGroup.DELETE("/:receiverId", DeleteFriendRequestHandler)
+	friendshipGroup.DELETE("/:receiverId", DeleteFriendRequestHandler)
 }

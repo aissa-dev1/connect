@@ -97,6 +97,32 @@ func MustGetBlock(blockerId int, blockedId int) (blockmodel.Block, error) {
 	return *block, nil
 }
 
+func GetBlocksBetweenUsers(blockerId int, blockedId int) ([]blockmodel.Block, error) {
+	blocks := []blockmodel.Block{}
+	
+	rows, rowsErr := db.Pool().Query(context.Background(), "SELECT id, blockerId, blockedId FROM blocks WHERE (blockerId = $1 AND blockedId = $2) OR (blockerId = $2 AND blockedId = $1);", blockerId, blockedId)
+
+	if rowsErr != nil {
+		return blocks, errors.New(errormessage.InternalServerError)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var block blockmodel.Block
+
+		scanErr := rows.Scan(&block.Id, &block.BlockerId, &block.BlockedId)
+
+		if scanErr != nil {
+			return blocks, errors.New(errormessage.InternalServerError)
+		}
+
+		blocks = append(blocks, block)
+	}
+
+	return blocks, nil
+}
+
 func GetBlockerBlocks(blockerId int) ([]blockmodel.Block, error) {
 	blocks := []blockmodel.Block{}
 

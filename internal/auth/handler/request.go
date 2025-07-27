@@ -18,9 +18,7 @@ import (
 func SignUpHandler(ctx *gin.Context) {
 	var requestBody authmodel.SignUpRequestBody
 
-	requestBodyErr := ctx.BindJSON(&requestBody)
-
-	if requestBodyErr != nil {
+	if requestBodyErr := ctx.BindJSON(&requestBody); requestBodyErr != nil {
 		response.RespondInternalError(ctx, errormessage.InternalServerError)
 		return
 	}
@@ -70,10 +68,7 @@ func SignUpHandler(ctx *gin.Context) {
 		response.RespondInternalError(ctx, errormessage.InternalServerError)
 		return
 	}
-
-	_, tokenErr := authservice.RegisterToken(ctx, userId)
-
-	if tokenErr != nil {
+	if _, tokenErr := authservice.RegisterToken(ctx, userId); tokenErr != nil {
 		response.RespondInternalError(ctx, tokenErr.Error())
 		return
 	}
@@ -84,9 +79,7 @@ func SignUpHandler(ctx *gin.Context) {
 func SignInHandler(ctx *gin.Context) {
 	var requestBody authmodel.SignInRequestBody
 
-	requestBodyErr := ctx.BindJSON(&requestBody)
-
-	if requestBodyErr != nil {
+	if requestBodyErr := ctx.BindJSON(&requestBody); requestBodyErr != nil {
 		response.RespondInternalError(ctx, errormessage.InternalServerError)
 		return
 	}
@@ -115,9 +108,7 @@ func SignInHandler(ctx *gin.Context) {
 		return
 	}
 
-	_, tokenErr := authservice.RegisterToken(ctx, user.Id)
-
-	if tokenErr != nil {
+	if _, tokenErr := authservice.RegisterToken(ctx, user.Id); tokenErr != nil {
 		response.RespondInternalError(ctx, tokenErr.Error())
 		return
 	}
